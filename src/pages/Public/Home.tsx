@@ -1,11 +1,13 @@
-import InputForm from '@components/inputs/InputForm'
-import React from 'react'
+import { ModelDialog } from '@components/common'
+import { useAppDispatch, useAppSelector } from '@hooks/useApp'
+import { clearMessage } from '@redux/slices/user.slice'
+import React, { useEffect, useState } from 'react'
 
 const Home = () => {
   return (
-    <div>
-      <InputForm />
-    </div>
+    <>
+      <div>home</div>
+    </>
   )
 }
 

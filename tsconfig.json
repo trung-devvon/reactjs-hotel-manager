@@ -21,6 +21,8 @@
       "@pages/*": ["src/pages/*"],
       "@hooks/*": ["src/hooks/*"],
       "@redux/*": ["src/redux/*"],
+      "@utils/*": ["src/utils/*"],
+      "@interfaces/*": ["src/interfaces/*"]
     },
     /* Linting */
     "strict": true,
