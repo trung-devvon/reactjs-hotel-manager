@@ -76,7 +76,7 @@ export const menuAdmin = [
         path: pathAdmin.CREATE_DESTINATION,
         name: 'Thêm mới',
         icon: <GoPlusCircle />
-      },
+      }
     ]
   },
   {
@@ -96,8 +96,19 @@ export const menuAdmin = [
         path: pathAdmin.CREATE_HOTEL,
         name: 'Thêm mới',
         icon: <GoPlusCircle />
-      },
+      }
     ]
-  },
-  
+  }
+]
+export const hotelTypes = [
+  'Khách sạn',
+  'Căn hộ',
+  'Resort',
+  'Biệt thự',
+  'Nhà gỗ',
+  'Nhà nghỉ thôn dã',
+  'Glamping',
+  'Nhà trọ',
+  'Chỗ nghỉ nhà dân',
+  'Khu cắm trại'
 ]

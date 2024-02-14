@@ -1,3 +1,4 @@
 import InputFile from './InputFile'
+import InputMultipleFiles from './InputMultipleFiles'
 
-export { InputFile }
+export { InputFile, InputMultipleFiles }

@@ -5,6 +5,7 @@ const ManageDestination = () => {
   return (
     <div>
       <Title>Danh sách địa điểm đã thêm</Title>
+      
     </div>
   )
 }

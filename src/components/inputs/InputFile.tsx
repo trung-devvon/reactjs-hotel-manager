@@ -32,7 +32,7 @@ const InputFile = ({ style, label, id, name, getFile, invalid, preview }: Props)
     <div className={clsx('flex flex-col w-full min-h-[170px] gap-2', style)}>
       <span className='text-main-600 tracking-tight text-md capitalize ml-[2px]'>{label + ':'}</span>
       <label
-        className='h-[300px] border-4 border-dashed border-main-500 flex justify-center items-center rounded-lg cursor-pointer flex-col gap-2'
+        className='min-h-[300px] border-4 border-dashed border-main-500 flex justify-center items-center rounded-lg cursor-pointer flex-col gap-2'
         htmlFor={id}
       >
         {isLoading ? (
@@ -49,7 +49,14 @@ const InputFile = ({ style, label, id, name, getFile, invalid, preview }: Props)
         )}
       </label>
       {invalid && <small className='text-sm text-main-200'>Vui lòng chọn hình ảnh</small>}
-      <input onChange={handleUploadFile} type='file' hidden id={id} name={name} />
+      <input
+        accept='image/png, image/jpg, image/jpeg, image/webp'
+        onChange={handleUploadFile}
+        type='file'
+        hidden
+        id={id}
+        name={name}
+      />
     </div>
   )
 }

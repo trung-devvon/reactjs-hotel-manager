@@ -6,7 +6,7 @@ import { CreateHotel, ManageHotel } from '@pages/admin/hotel'
 import { ManageUser } from '@pages/admin/user'
 import { MemberLayout, Personal } from '@pages/member'
 import { Auth, Home, Layout } from '@pages/public'
-import { getCurrentThunk, getRolesThunk } from '@redux/actions'
+import { getCurrentThunk, getDestinationsThunk, getRolesThunk } from '@redux/actions'
 import { pathAdmin, pathMember, pathUser } from '@utils/path'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
@@ -17,6 +17,7 @@ function App() {
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getRolesThunk())
+    dispatch(getDestinationsThunk())
   }, [])
   useEffect(() => {
     let clearTime: any

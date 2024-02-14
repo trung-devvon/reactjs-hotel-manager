@@ -7,3 +7,14 @@ export const apiCreateNewDestination: SubmitHandler<FieldValues> = (data) =>
     url: 'destination/create',
     data: data
   })
+export const apiGetAllDestination = () =>
+  instance({
+    method: 'GET',
+    url: 'destination/get-all'
+  })
+export const apiGetDestination = (params: any) =>
+  instance({
+    method: 'GET',
+    url: 'destination/get',
+    params
+  })

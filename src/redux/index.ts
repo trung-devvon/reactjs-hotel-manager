@@ -3,6 +3,7 @@ import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from 'redux-persist'
 import userSlice from './slices/user.slice'
 import appSlice from './slices/app.slice'
+import hotelSlice from './slices/hotel.slice'
 
 const commonConfig = {
   key: 'tour/user',
@@ -16,7 +17,8 @@ const userConfig = {
 export const store = configureStore({
   reducer: {
     user: persistReducer(userConfig, userSlice)!,
-    app: appSlice
+    app: appSlice,
+    hotel: hotelSlice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

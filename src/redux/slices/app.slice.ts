@@ -1,5 +1,5 @@
 import { IDestinationsSelect } from '@interfaces/destination.interface'
-import { getRolesThunk } from '@redux/actions'
+import { getDestinationsThunk, getRolesThunk } from '@redux/actions'
 import { createSlice } from '@reduxjs/toolkit'
 
 interface IAppState {
@@ -10,7 +10,7 @@ interface IAppState {
   modalContent: string | null
   hotelTypes: string[]
 }
-const initialState = {
+const initialState: IAppState = {
   roles: [],
   isLoading: false,
   destinations: [],
@@ -29,6 +29,9 @@ export const appSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getRolesThunk.fulfilled, (state, action) => {
       state.roles = action.payload
+    })
+    .addCase(getDestinationsThunk.fulfilled, (state, action) => {
+      state.destinations = action.payload
     })
   }
 })

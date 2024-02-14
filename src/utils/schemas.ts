@@ -33,7 +33,8 @@ export const schema = yup.object({
     .max(50, 'Độ dài tối đa 50 kí tự [!]'),
   password: yup
     .string()
-    .required('Không được bỏ trống [!]').trim()
+    .required('Không được bỏ trống [!]')
+    .trim()
     .min(6, 'Mật khẩu 6-16 kí tự [!]')
     .max(16, 'Mật khẩu 6-16 kí tự [!]'),
   confirmPassword: handleConfirmPasswordYup('password')
@@ -46,6 +47,15 @@ export const destinationSchema = yup.object({
     .min(4, 'Độ dài tối thiểu 4 kí tự [!]')
     .max(50, 'Độ dài tối đa 50 kí tự [!]')
 })
+export const hotelSchema = yup.object({
+  name: yup
+    .string()
+    .required('Không được bỏ trống [!]')
+    .trim()
+    .min(4, 'Độ dài tối thiểu 4 kí tự [!]')
+    .max(50, 'Độ dài tối đa 50 kí tự [!]')
+})
 export type DestinationSchema = yup.InferType<typeof destinationSchema>
+export type HotelSchema = yup.InferType<typeof hotelSchema>
 export type Schema = yup.InferType<typeof schema>
 export type LoginSchema = yup.InferType<typeof loginSchema>
