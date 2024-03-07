@@ -16,3 +16,8 @@ export const generateCode = (string: string) =>
     .split('')
     .reverse()
     .join('')
+
+export const generateRange = (start: number, end: number) => {
+  const length = end - start + 1
+  return Array.from({ length }, (_, index) => start + index)
+}

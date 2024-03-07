@@ -53,7 +53,14 @@ export const hotelSchema = yup.object({
     .required('Không được bỏ trống [!]')
     .trim()
     .min(4, 'Độ dài tối thiểu 4 kí tự [!]')
-    .max(50, 'Độ dài tối đa 50 kí tự [!]')
+    .max(50, 'Độ dài tối đa 50 kí tự [!]'),
+  address: yup
+    .string()
+    .required('Không được bỏ trống [!]')
+    .trim()
+    .min(4, 'Độ dài tối thiểu 4 kí tự [!]')
+    .max(200, 'Độ dài tối đa 200 kí tự [!]'),
+
 })
 export type DestinationSchema = yup.InferType<typeof destinationSchema>
 export type HotelSchema = yup.InferType<typeof hotelSchema>

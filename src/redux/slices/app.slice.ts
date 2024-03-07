@@ -7,7 +7,7 @@ interface IAppState {
   isLoading: boolean
   destinations: IDestinationsSelect[]
   isShowModal: boolean
-  modalContent: string | null
+  modalContent: string | React.ReactNode | null
   hotelTypes: string[]
 }
 const initialState: IAppState = {
@@ -24,16 +24,21 @@ export const appSlice = createSlice({
   reducers: {
     toggleLoading: (state, action) => {
       state.isLoading = action.payload
+    },
+    modal: (state, action) => {
+      state.isShowModal = action.payload.isShowModal
+      state.modalContent = action.payload.modalContent
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(getRolesThunk.fulfilled, (state, action) => {
-      state.roles = action.payload
-    })
-    .addCase(getDestinationsThunk.fulfilled, (state, action) => {
-      state.destinations = action.payload
-    })
+    builder
+      .addCase(getRolesThunk.fulfilled, (state, action) => {
+        state.roles = action.payload
+      })
+      .addCase(getDestinationsThunk.fulfilled, (state, action) => {
+        state.destinations = action.payload
+      })
   }
 })
-export const { toggleLoading } = appSlice.actions
+export const { toggleLoading, modal } = appSlice.actions
 export default appSlice.reducer

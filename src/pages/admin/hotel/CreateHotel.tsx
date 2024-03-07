@@ -1,17 +1,19 @@
 import { apiCreateNewHotel } from '@api/hotel'
 import { PageLoading, Title, ValidText } from '@components/common'
 import { Facilities } from '@components/facilities'
-import { InputMultipleFiles } from '@components/inputs'
+import { InputMultipleFiles, MarkdownEditor } from '@components/inputs'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useAppDispatch, useAppSelector } from '@hooks/useApp'
 import { Button, Input, Option, Select } from '@material-tailwind/react'
-import { toggleLoading } from '@redux/slices/app.slice'
+import { modal, toggleLoading } from '@redux/slices/app.slice'
 import { setDefaultFacilities } from '@redux/slices/hotel.slice'
 import { hotelTypes } from '@utils/constans'
 import { HotelSchema, hotelSchema } from '@utils/schemas'
 import React, { useEffect, useRef, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import Swal from 'sweetalert2'
+import { AddGeneralRule } from '../GeneralRule'
 
 interface IValidateForm {
   destinations: string | null
@@ -30,12 +32,16 @@ const CreateHotel = () => {
   })
   const scrollRef = useRef<HTMLDivElement>(null)
   const [images, setImage] = useState<string[]>([])
-  const [des, setDes] = useState<any>(null)
+  const [des, setDes] = useState<any>('')
+  const [hotelTypesChoose, setHotelTypes] = useState('')
   const [invalid, setInvalid] = useState<IValidateForm>({
     destinations: null,
     facilities: null,
     images: false,
     hotelType: null
+  })
+  const [dataDescription, setDataDescription] = useState<any>({
+    description: ''
   })
   const dispatch = useAppDispatch()
   useEffect(() => {
@@ -48,6 +54,10 @@ const CreateHotel = () => {
     setDes(value)
     setInvalid((prev) => ({ ...prev, destinations: null }))
   }
+  const handleChangeHotelTypes = (value: any) => {
+    setHotelTypes(value)
+    setInvalid((prev) => ({ ...prev, hotelType: null }))
+  }
   useEffect(() => {
     if (facilities.length === 0 || !facilities) {
       setInvalid((prev) => ({ ...prev, facilities: 'Vui lòng chọn đầy đủ các tiện nghi mà khách sạn có' }))
@@ -55,15 +65,33 @@ const CreateHotel = () => {
       setInvalid((prev) => ({ ...prev, facilities: null }))
     }
   }, [facilities])
+  useEffect(() => {
+    if (!hotelTypesChoose) {
+      setInvalid((prev) => ({ ...prev, hotelType: 'Vui lòng chọn loại chỗ nghỉ' }))
+    } else {
+      setInvalid((prev) => ({ ...prev, hotelType: null }))
+    }
+  }, [hotelTypesChoose])
+
   const whenSubmit: SubmitHandler<FieldValues> = async (data) => {
     if (!des) {
       setInvalid((prev) => ({ ...prev, destinations: 'Vui lòng chọn địa điểm tham quan [!]' }))
       return
     }
-    if (invalid.images || invalid.facilities || invalid.destinations) return
+    if (invalid.images !== false || invalid.facilities || invalid.destinations || invalid.hotelType) {
+      return
+    }
 
-    const payload = { ...data, name: data.name, destinationCode: des, images, facilities }
-    console.log(payload)
+    const payload: any = {
+      ...data,
+      name: data.name,
+      address: data.address,
+      destinationCode: des,
+      images,
+      facilities,
+      typeCode: hotelTypesChoose
+    }
+    if (dataDescription) payload.description = dataDescription.description
     dispatch(toggleLoading(true))
     const response: any = await apiCreateNewHotel(payload)
     dispatch(toggleLoading(false))
@@ -72,10 +100,24 @@ const CreateHotel = () => {
       reset()
       setImage([])
       setDes('')
+      setHotelTypes('')
       dispatch(setDefaultFacilities())
-      if (scrollRef.current) {
-        scrollRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }
+      setDataDescription({
+        description: ''
+      })
+      Swal.fire({
+        title: 'Thành công!',
+        text: 'Tạo bài đăng thành công. Giờ hãy thiết lập các quy địn chung cho khách sạn này nào!',
+        showCancelButton: true,
+        cancelButtonText: 'Để sau',
+        confirmButtonText: 'Đi tới thiết lập',
+        icon: 'success'
+      }).then((feedback) => {
+        if (feedback.isConfirmed) {
+          dispatch(modal({ isShowModal: true, modalContent: <AddGeneralRule data={response.hotel} /> }))
+        }
+      })
+      scrollRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
     } else toast.error(response.message)
   }
   return (
@@ -92,22 +134,10 @@ const CreateHotel = () => {
               </div>
             </div>
             <div className='col-span-3 w-full'>
-              <Select
-                color='teal'
-                label='Chọn địa điểm tham quan'
-                selected={(element) =>
-                  element &&
-                  React.cloneElement(element, {
-                    disabled: true,
-                    className: 'flex items-center opacity-100 px-0 gap-2 pointer-events-none'
-                  })
-                }
-                value={des}
-                onChange={handleChangeDestinations}
-              >
-                {destinations?.map(({ name, code }: any) => (
-                  <Option key={code} value={code}>
-                    {name}
+              <Select color='teal' label='Chọn địa điểm tham quan' value={des} onChange={handleChangeDestinations}>
+                {destinations?.map((data) => (
+                  <Option key={data.code} value={data.code}>
+                    {data.name}
                   </Option>
                 ))}
               </Select>
@@ -128,11 +158,16 @@ const CreateHotel = () => {
           <span className='mb-10'>
             <ValidText>{invalid.facilities}</ValidText>
           </span>
-          <div className="grid grid-cols-10 gap-6">
-            <div className="col-span-7">
-              <div className="w-full">
-                <Select label='Chọn loại chỗ nghỉ' color='teal'>
-                  {hotelTypes.map(type => (
+          <div className='grid grid-cols-10 gap-6'>
+            <div className='col-span-3'>
+              <div className='w-full'>
+                <Select
+                  label='Chọn loại chỗ nghỉ'
+                  color='teal'
+                  value={hotelTypesChoose}
+                  onChange={handleChangeHotelTypes}
+                >
+                  {hotelTypes.map((type) => (
                     <Option key={type} value={type}>
                       {type}
                     </Option>
@@ -140,10 +175,20 @@ const CreateHotel = () => {
                 </Select>
               </div>
             </div>
-            <div className="col-span-3">
-              <div className="w-full"></div>
+            <div className='col-span-7'>
+              <div className='w-full'>
+                <Input color='teal' crossOrigin={'true'} label='Nhập Địa Chỉ' {...register('address')} />
+                <ValidText>{errors.address?.message}</ValidText>
+              </div>
             </div>
           </div>
+          <MarkdownEditor
+            height={400}
+            value={dataDescription.description}
+            title='Mô tả về chỗ nghỉ:'
+            changeValue={setDataDescription}
+            name='description'
+          />
           <Button color='teal' type='submit'>
             Tạo mới khách sạn
           </Button>

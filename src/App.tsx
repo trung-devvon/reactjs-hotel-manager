@@ -5,15 +5,17 @@ import { ManageDestination, CreateDestination } from '@pages/admin/destination'
 import { CreateHotel, ManageHotel } from '@pages/admin/hotel'
 import { ManageUser } from '@pages/admin/user'
 import { MemberLayout, Personal } from '@pages/member'
-import { Auth, Home, Layout } from '@pages/public'
+import { Auth, Home, Layout, Test } from '@pages/Public'
 import { getCurrentThunk, getDestinationsThunk, getRolesThunk } from '@redux/actions'
 import { pathAdmin, pathMember, pathUser } from '@utils/path'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { Route, Routes } from 'react-router-dom'
+import { Modal } from '@components/common'
 
 function App() {
   const { message, current, token } = useAppSelector((state) => state.user)
+  const { modalContent, isShowModal } = useAppSelector((state) => state.app)
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getRolesThunk())
@@ -29,10 +31,17 @@ function App() {
   }, [token])
   return (
     <>
+      {isShowModal && modalContent && (
+        <div className='absolute z-[999] glass-white max-h-screen overflow-y-auto inset-0'>
+          <Modal>{modalContent}</Modal>
+        </div>
+      )}
       <Routes>
         {/* Public Route */}
         <Route path={pathUser.PUBLIC} element={<Layout />}>
           <Route path={pathUser.HOME} element={<Home />} />
+          <Route path={'test'} element={<Test />} />
+
         </Route>
         {/* page not found */}
         <Route path={pathUser.ALL} element={<NotFound />} />

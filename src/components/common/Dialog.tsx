@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button, Dialog, DialogHeader, DialogBody, DialogFooter } from '@material-tailwind/react'
 
 interface Props {
@@ -8,10 +8,12 @@ interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
   cancelText?: string
   OkText?: string
+  onlyConf?: boolean
   onConfirm?: () => void
 }
 
-const ModelDialog: React.FC<Props> = ({ title, body, open, setOpen, cancelText, OkText, onConfirm }) => {
+const ModelDialog: React.FC<Props> = ({ title, body, open, setOpen, onlyConf, cancelText, OkText, onConfirm }) => {
+  // const [open, setOpen] = useState(true)
   const handleOpen = () => setOpen(!open)
   const handleConfirm = () => {
     handleOpen()
@@ -31,9 +33,11 @@ const ModelDialog: React.FC<Props> = ({ title, body, open, setOpen, cancelText, 
       <DialogHeader>{title || 'Bạn có thông báo'}</DialogHeader>
       <DialogBody>{body}</DialogBody>
       <DialogFooter>
-        <Button variant='text' color='red' onClick={handleOpen} className='mr-1'>
-          <span>{cancelText || 'Cancel'}</span>
-        </Button>
+        {!onlyConf && (
+          <Button variant='text' color='red' onClick={handleOpen} className='mr-1'>
+            <span>{cancelText || 'Cancel'}</span>
+          </Button>
+        )}
         <Button variant='gradient' color='green' onClick={handleConfirm}>
           <span>{OkText || 'Confirm'}</span>
         </Button>
