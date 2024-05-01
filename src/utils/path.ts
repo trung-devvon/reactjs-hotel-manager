@@ -13,6 +13,8 @@ export const pathUser = {
 export const pathAdmin = {
   ADMIN: 'admin',
   MANAGE_MEMBER: 'manage-member',
+  CREATE_HOTELTYPE: 'create-hotel-type',
+  MANAGE_HOTELTYPE: 'manage-hotel-type',
   MANAGE_DESTINATION: 'manage-destination',
   CREATE_DESTINATION: 'create-destination',
   MANAGE_HOTEL: 'manage-hotel',

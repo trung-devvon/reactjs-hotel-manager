@@ -4,37 +4,37 @@ interface ITimePicker {
   label?: string
   getTime?: React.Dispatch<React.SetStateAction<any>>
   id?: string
-  currentTime?: number
+  currentTime?: string | number
 }
 const TimePicker = ({ label, getTime, id, currentTime = 0 }: ITimePicker) => {
-  const [time, setTime] = useState({ hour: '', min: '' })
+  const [time, setTime] = useState<any>({ hour: '', min: '' })
   useEffect(() => {
-    getTime && getTime(time)
-  }, [])
+    getTime && getTime((prev: any) => ({ ...prev, [id || '']: +time.hour + Math.round(time.min / 0.6) / 100 }))
+  }, [time])
   return (
     <div className='flex flex-col'>
       {label && <span className='font-medium'>{label}</span>}
       <div className='flex gap-3 items-center'>
         <select
-          value={Math.floor(currentTime) || time.hour}
-          onChange={(e) => setTime((prev) => ({ ...prev, hour: e.target.value }))}
-          className='border py-2 rounded-md min-w-[80px]'
+          value={Math.floor(+currentTime) || time.hour}
+          onChange={(e) => setTime((prev: any) => ({ ...prev, hour: e.target.value }))}
+          className='form-select min-w-[100px]'
         >
           <option value='' disabled>
             Giờ
           </option>
           {Array.from(Array(24).keys()).map((el) => (
             <option key={el + 1000} value={el}>
-              {el}
+              {el + ' giờ'}
             </option>
           ))}
         </select>
         <div className='font-bold'>:</div>
         <div className='flex w-full max-w-[8rem]'>
           <select
-            className='border min-w-[80px] py-2 rounded-md'
-            value={time.min}
-            onChange={(e) => setTime((prev) => ({ ...prev, min: e.target.value }))}
+            className='form-select min-w-[100px]'
+            value={(+currentTime - Math.floor(+currentTime)) * 60 || time.min}
+            onChange={(e) => setTime((prev: any) => ({ ...prev, min: e.target.value }))}
           >
             <option value='' disabled>
               Phút
@@ -42,8 +42,8 @@ const TimePicker = ({ label, getTime, id, currentTime = 0 }: ITimePicker) => {
             {Array.from(Array(60).keys())
               .filter((num) => num % 15 === 0)
               .map((minute: any) => (
-                <option key={minute + 1000} value={minute}>
-                  {minute}
+                <option key={minute} value={minute}>
+                  {minute + ' phút'}
                 </option>
               ))}
           </select>

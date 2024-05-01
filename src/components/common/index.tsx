@@ -5,5 +5,6 @@ import Title from './Title'
 import ValidText from './ValidText'
 import PageLoading from './PageLoading'
 import Modal from './Modal'
+import Slider from './Slider'
 
-export { Logo, ModelDialog, Navigation, Title, ValidText, PageLoading, Modal }
+export { Logo, ModelDialog, Navigation, Title, ValidText, PageLoading, Modal, Slider }

@@ -13,3 +13,20 @@ export const apiGetHotels: SubmitHandler<FieldValues> = (params) =>
     url: 'hotel/',
     params
   })
+export const apiAddRules: SubmitHandler<FieldValues> = (data, hotelId) =>
+  instance({
+    method: 'POST',
+    url: 'hotel/add-rule/' + hotelId,
+    data
+  })
+export const apiCreateNewHotelType: SubmitHandler<FieldValues> = (data) =>
+  instance({
+    method: 'POST',
+    url: 'hotelType/create-new',
+    data
+  })
+export const apiGetAllHotelTypes = () =>
+  instance({
+    method: 'GET',
+    url: 'hotelType/all'
+  })

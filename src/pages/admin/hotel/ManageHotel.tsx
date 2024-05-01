@@ -28,7 +28,6 @@ const ManageHotel = () => {
   const [openModal, setOpenModal] = useState(false)
   const [id, setId] = useState('')
   const [searchParams] = useSearchParams()
-
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const debounceValue = useDebounce(watch('keyword'))
@@ -49,11 +48,7 @@ const ManageHotel = () => {
     const params = Object.fromEntries([...searchParams])
     if (!editHotel) fetchHotels({ ...params })
   }, [searchParams])
-  useEffect(() => {
-    console.log('Hotels:', hotels)
-  }, [hotels])
   const confirmDelete = () => {
-    console.log(id)
     setOpenModal(false)
   }
   const handleDelete = (id: string) => {
@@ -91,7 +86,8 @@ const ManageHotel = () => {
             </thead>
             <tbody>
               {hotels?.rows.map((el: any, index: number) => (
-                <tr key={index} className='border'>
+                <tr key={el.id} className='border'>
+                  { /* test: 4 * 1 + 1 + index) */}
                   <td className='text-center p-3'>
                     {+import.meta.env.VITE_LIMIT *
                       (+searchParams.get('page')! - 1 > 0 ? +searchParams.get('page')! - 1 : 0) +
@@ -102,7 +98,7 @@ const ManageHotel = () => {
                   <td className='text-center p-3'>{el.typeCode ? el.typeCode : 'chưa có'}</td>
                   <td className='text-center p-3'>{el.star ? el.star : 'chưa có'}</td>
                   <td className='text-center p-3'>{el.address}</td>
-                  <td className='text-center p-3'>{el.destinationCode}</td>
+                  <td className='text-center p-3'>{el.destinationData?.name}</td>
                   <td className='text-center p-3'>{el.status == 'ROOMS' ? 'còn phòng' : 'hết phòng'}</td>
                   <td className='text-center p-3'>{moment(el.createdAt).format('DD/MM/YY')}</td>
                   <td className='text-center p-3'>

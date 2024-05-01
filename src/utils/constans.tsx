@@ -5,6 +5,7 @@ import { BsCarFront } from 'react-icons/bs'
 import { GoPlusCircle, GoTasklist } from 'react-icons/go'
 import { AiOutlineDashboard } from 'react-icons/ai'
 import { PiUsersThree } from 'react-icons/pi'
+import { RiHotelLine } from "react-icons/ri";
 export const menuCategories = [
   {
     id: 1,
@@ -98,6 +99,26 @@ export const menuAdmin = [
         icon: <GoPlusCircle />
       }
     ]
+  },
+  {
+    id: 5,
+    name: 'Phân loại chỗ nghỉ',
+    icon: <RiHotelLine size={20}/>,
+    type: 'PARENT',
+    subs: [
+      {
+        id: 1,
+        path: pathAdmin.MANAGE_HOTELTYPE,
+        name: 'Quản lý',
+        icon: <GoTasklist />
+      },
+      {
+        id: 2,
+        path: pathAdmin.CREATE_HOTELTYPE,
+        name: 'Thêm mới',
+        icon: <GoPlusCircle />
+      }
+    ]
   }
 ]
 export const hotelTypes = [
@@ -112,3 +133,30 @@ export const hotelTypes = [
   'Chỗ nghỉ nhà dân',
   'Khu cắm trại'
 ]
+export const paymethods = [
+  {
+    id: 'MASTER_CARD',
+    name: 'Master Card',
+    image: '/paymethods/mastercard.svg',
+    value: 'MASTER_CARD'
+  },
+  {
+    id: 'VISA',
+    name: 'Visa',
+    image: '/paymethods/visacard.svg',
+    value: 'VISA'
+  },
+  {
+    id: 'MAESTRO',
+    name: 'Maestro',
+    image: '/paymethods/maestro.svg',
+    value: 'MAESTRO'
+  },
+  {
+    id: 'PAYPAL',
+    name: 'Paypal',
+    image: '/paymethods/paypal.svg',
+    value: 'PAYPAL'
+  }
+]
+export type PayMethod = typeof paymethods;

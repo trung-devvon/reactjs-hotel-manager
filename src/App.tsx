@@ -2,24 +2,25 @@ import { useAppDispatch, useAppSelector } from '@hooks/useApp'
 import NotFound from '@pages/NotFound'
 import { AdminLayout, Dashboard } from '@pages/admin'
 import { ManageDestination, CreateDestination } from '@pages/admin/destination'
-import { CreateHotel, ManageHotel } from '@pages/admin/hotel'
+import { CreateHotel, CreateHotelType, ManageHotel, ManageHotelType } from '@pages/admin/hotel'
 import { ManageUser } from '@pages/admin/user'
 import { MemberLayout, Personal } from '@pages/member'
-import { Auth, Home, Layout, Test } from '@pages/Public'
-import { getCurrentThunk, getDestinationsThunk, getRolesThunk } from '@redux/actions'
+import { getCurrentThunk, getDestinationsThunk, getHotelTypesThunk, getRolesThunk } from '@redux/actions'
 import { pathAdmin, pathMember, pathUser } from '@utils/path'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { Route, Routes } from 'react-router-dom'
 import { Modal } from '@components/common'
+import { Auth, Home, Layout, Test } from '@pages/public'
 
 function App() {
-  const { message, current, token } = useAppSelector((state) => state.user)
+  const { token } = useAppSelector((state) => state.user)
   const { modalContent, isShowModal } = useAppSelector((state) => state.app)
   const dispatch = useAppDispatch()
   useEffect(() => {
     dispatch(getRolesThunk())
     dispatch(getDestinationsThunk())
+    dispatch(getHotelTypesThunk())
   }, [])
   useEffect(() => {
     let clearTime: any
@@ -54,6 +55,8 @@ function App() {
           <Route path={pathAdmin.MANAGE_DESTINATION} element={<ManageDestination />} />
           <Route path={pathAdmin.MANAGE_HOTEL} element={<ManageHotel />} />
           <Route path={pathAdmin.CREATE_HOTEL} element={<CreateHotel />} />
+          <Route path={pathAdmin.CREATE_HOTELTYPE} element={<CreateHotelType />} />
+          <Route path={pathAdmin.MANAGE_HOTELTYPE} element={<ManageHotelType />} />
           <Route path={pathAdmin.MANAGE_MEMBER} element={<ManageUser />} />
         </Route>
         {/* member route */}

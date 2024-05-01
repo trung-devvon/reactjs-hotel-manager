@@ -7,7 +7,6 @@ import { useAppDispatch, useAppSelector } from '@hooks/useApp'
 import { Button, Input, Option, Select } from '@material-tailwind/react'
 import { modal, toggleLoading } from '@redux/slices/app.slice'
 import { setDefaultFacilities } from '@redux/slices/hotel.slice'
-import { hotelTypes } from '@utils/constans'
 import { HotelSchema, hotelSchema } from '@utils/schemas'
 import React, { useEffect, useRef, useState } from 'react'
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
@@ -48,8 +47,9 @@ const CreateHotel = () => {
     if (!images.length && isDirty) return setInvalid((prev) => ({ ...prev, images: true }))
     else setInvalid((prev) => ({ ...prev, images: false }))
   }, [images, isDirty])
-  const { destinations, isLoading } = useAppSelector((state) => state.app)
+  const { destinations, isLoading, hotelTypes } = useAppSelector((state) => state.app)
   const { facilities } = useAppSelector((state) => state.hotel)
+  console.log(hotelTypes)
   const handleChangeDestinations = (value: any) => {
     setDes(value)
     setInvalid((prev) => ({ ...prev, destinations: null }))
@@ -89,10 +89,12 @@ const CreateHotel = () => {
       destinationCode: des,
       images,
       facilities,
-      typeCode: hotelTypesChoose
+      typeCode: hotelTypesChoose,
+      lnglat: ['37.7749', '-122.4194']
     }
     if (dataDescription) payload.description = dataDescription.description
     dispatch(toggleLoading(true))
+    console.log(payload)
     const response: any = await apiCreateNewHotel(payload)
     dispatch(toggleLoading(false))
     if (response.success) {
@@ -112,7 +114,7 @@ const CreateHotel = () => {
         cancelButtonText: 'Để sau',
         confirmButtonText: 'Đi tới thiết lập',
         icon: 'success'
-      }).then((feedback) => {
+      }).then((feedback: any) => {
         if (feedback.isConfirmed) {
           dispatch(modal({ isShowModal: true, modalContent: <AddGeneralRule data={response.hotel} /> }))
         }
@@ -168,8 +170,8 @@ const CreateHotel = () => {
                   onChange={handleChangeHotelTypes}
                 >
                   {hotelTypes.map((type) => (
-                    <Option key={type} value={type}>
-                      {type}
+                    <Option className='capitalize' key={type.id} value={type.code}>
+                      {type.name}
                     </Option>
                   ))}
                 </Select>
